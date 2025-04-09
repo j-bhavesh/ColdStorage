@@ -1,0 +1,576 @@
+-- Update query to update the vehicle_number field in storage_loadings tble based on the vehicle_id
+	- add the new field as vehicle_number and must use instead of the vehicle_id and make that vehicle_id filed as nullable
+
+ 	- UPDATE storage_loadings sl
+	JOIN vehicles v ON sl.vehicle_id = v.id
+	SET sl.vehicle_number = v.vehicle_number
+	WHERE sl.vehicle_number IS NULL;
+
+-- Update query to update the vehicle_number field in storage_unloadings tble based on the vehicle_id
+	- add the new field as vehicle_number and must use instead of the vehicle_id and make that vehicle_id filed as nullable
+
+ 	- UPDATE storage_unloadings sl
+	JOIN vehicles v ON sl.vehicle_id = v.id
+	SET sl.vehicle_number = v.vehicle_number
+	WHERE sl.vehicle_number IS NULL;
+
+-- Update query to update the vehicle_number field in challans tble based on the vehicle_id
+	- add the new field as vehicle_number and must use instead of the vehicle_id and make that vehicle_id filed as nullable
+
+ 	- UPDATE challans sl
+	JOIN vehicles v ON sl.vehicle_id = v.id
+	SET sl.vehicle_number = v.vehicle_number
+	WHERE sl.vehicle_number IS NULL;
+
+
+===== Search with Farmer id is not working ====
+
+1. PACKAGING DISTRIBUTION : Search with farmer id is not working
+2. ADVANCE PAYMENT : Search with farmer id is not working
+3. CHALLANS (New point) : Search with farmer id is not working
+4. STORAGE UNLOADING -> Search with Vehical number is not working
+
+============ Select2 Ajax Impliments ==============
+
+Setup Select2 Ajax :
+	- \views\layouts\admin.blade.php
+
+	- Link the select2 Ajax js and css in above layout file
+
+1. Potato Booking(Agreement) :
+	- Route :
+		- routes\web.php
+			- Route::get('/farmers/search', [\App\Http\Controllers\Admin\FarmerController::class, 'searchFarmer'])->name('farmers.search');
+	Controller :	
+		- \Http\Controllers\Admin\FarmerController.php
+			- searchFarmer(Request $request) : $module == 'potato-agreement'
+
+	- Service file :
+		- \Services\FarmerService.php
+			- searchFarmer($farmerSearch)
+
+	- Table file :
+		- \Livewire\Admin\AgreementTable.php
+			- Add the farmer_name param adn set the name
+
+	- Blade file :
+		- \views\livewire\admin\agreements\index.blade.php
+			- initSelect2()
+
+2. Seeds Booking :
+	- Route :
+		- routes\web.php
+			- Route::get('/farmers/search', [\App\Http\Controllers\Admin\FarmerController::class, 'searchFarmer'])->name('farmers.search');
+	Controller :	
+		- \Http\Controllers\Admin\FarmerController.php
+			- searchFarmer(Request $request) : $module == 'seed-booking'
+
+	- Service file :
+		- \Services\FarmerService.php
+			- searchFarmer($farmerSearch)
+
+	- Table file :
+		- \Livewire\Admin\SeedsBookingTable.php
+			- Add the farmer_name param adn set the name
+
+	- Blade file :
+		- \views\livewire\admin\agreements\index.blade.php
+			- initSelect2()
+
+3. Seed Distributions :
+	- Route :
+		- routes\web.php
+			- Route::get('/seed-distributions/search', [\App\Http\Controllers\Admin\SeedDistributionController::class, 'searchSeedDistributions'])->name('seed-distributions.search');
+
+	Controller :	
+		- \Http\Controllers\Admin\SeedDistributionController
+			- searchSeedDistributions(Request $request)
+
+	- Service file :
+		- \Services\SeedDistributionService.php
+			- searchSeedDistributions($seedsDistributionsSearch)
+
+	- Table file :
+		- \Livewire\Admin\SeedDistributionsTable.php
+			- Add the seed_booking_name param adn set the name
+
+	- Blade file :
+		- \views\livewire\admin\seed-distributions\index.blade.php
+			- initSelect2()
+
+	- Form (Create/Update) Blade file :
+		- \views\livewire\admin\seed-distributions\form.blade.php
+			- Add the id tag into Seed Distribution dropdown
+
+4. Packaging Distribution :
+	- Route :
+		- routes\web.php
+			- Route::get('/packaging-distributions/search-farmer', [\App\Http\Controllers\Admin\PackagingDistributionController::class, 'searchPackagingDistributionFarmer'])->name('packaging-distributions.search');
+
+	Controller :	
+		- \Http\Controllers\Admin\PackagingDistributionController
+			- searchPackagingDistributionFarmer(Request $request)
+
+	- Service file :
+		- \Services\PackagingDistributionService.php
+			- searchPdFarmer($searchPdFarmer)
+
+	- Table file :
+		- \Livewire\Admin\PackagingDistributionsTable.php
+			- Add the agreement_name param adn set the name
+
+	- Blade file :
+		- \views\livewire\admin\packaging-distributions\table.blade.php
+			- initSelect2()
+
+	- Form (Create/Update) Blade file :
+		- \views\livewire\admin\packaging-distributions\form.blade.php
+			- Add the id tag into Packaging Distribution dropdown
+
+5. Advance Payment :
+	- Route :
+		- routes\web.php
+			- Route::get('/farmers/search', [\App\Http\Controllers\Admin\FarmerController::class, 'searchFarmer'])->name('farmers.search');
+	Controller :	
+		- \Http\Controllers\Admin\FarmerController.php
+			- searchFarmer(Request $request) : $module == 'advance-payment'
+
+	- Service file :
+		- \Services\FarmerService.php
+			- searchFarmer($farmerSearch)
+
+	- Table file :
+		- \Livewire\Admin\AdvancePaymentsTable.php
+			- Add the farmer_name param adn set the name
+
+	- Blade file :
+		- \views\livewire\admin\advance-payments\index.blade.php
+			- initSelect2()
+
+	- Form (Create/Update) Blade file :
+		- \views\livewire\admin\advance-payments\form.blade.php
+			- Add the id tag into Advance Payment dropdown
+---
+6. Storage Loading :
+	- Route :
+		- routes\web.php
+			- Route::get('/farmers/search', [\App\Http\Controllers\Admin\FarmerController::class, 'searchFarmer'])->name('farmers.search');
+	Controller :	
+		- \Http\Controllers\Admin\FarmerController.php
+			- searchFarmer(Request $request) : $module == 'storage-loading'
+
+	- Service file :
+		- \Services\FarmerService.php
+			- searchFarmer($farmerSearch)
+
+	- Table file :
+		- \Livewire\Admin\StorageLoadingTable.php
+			- Add the selected_farmer_name param adn set the name
+
+	- Blade file :
+		- \views\livewire\admin\storage-loadings\index.blade.php
+			- initSelect2()
+
+	- Form (Create/Update) Blade file :
+		- \views\livewire\admin\storage-loadings\form.blade.php
+			- Add the id tag into Advance Payment dropdown
+
+7. Challans :
+	- Route :
+		- routes\web.php
+			- Route::get('/farmers/search', [\App\Http\Controllers\Admin\FarmerController::class, 'searchFarmer'])->name('farmers.search');
+	Controller :	
+		- \Http\Controllers\Admin\FarmerController.php
+			- searchFarmer(Request $request) : $module == 'challan'
+
+	- Service file :
+		- \Services\FarmerService.php
+			- searchFarmer($farmerSearch)
+
+	- Table file :
+		- \Livewire\Admin\ChallansTable.php
+			- Add the farmer_name param adn set the name
+
+	- Blade file :
+		- \views\livewire\admin\challans\index.blade.php
+			- initSelect2()
+
+	- Form (Create/Update) Blade file :
+		- \views\livewire\admin\challans\form.blade.php
+			- Add the id tag into Challans dropdown
+
+8. Processing Report :
+
+=============== Search Data from Table View ===============
+
+1. STORAGE UNLOADING :
+	- Service file :
+		- \Services\StorageUnloadingService.php
+			- getAll() add the search fields
+
+2. Challans :
+	- Service file :
+		- \Services\ChallanService.php
+			- getAll() add the search fields
+
+3. STORAGE LOADING : 
+	- Service file :
+		- \Services\StorageLoadingService.php
+			- getAll() add the search fields
+
+4. ADVANCE PAYMENT :
+	- Service file :
+		- \Services\AdvancePaymentService.php
+			- getAll() add the search fields
+
+5. SEED DISTRIBUTION :
+	- Service file :
+		- \Services\SeedDistributionService.php
+			- getAll() add the search fields
+
+6. SEEDS BOOKING :
+	- Service file :
+		- \Services\SeedsBookingService.php
+			- getAll() add the search fields
+
+7. FARMERS :
+	- Service file :
+		- \Services\SeedsBookingService.php
+			- getAll() add the search fields
+	- Table file :
+		- \Livewire\Admin\FarmersTable.php
+			- render() add the search fields
+
+
+================== Add the created_by field for all the existing table ====================
+
+Migration file : 
+	- path : \database\migrations\2025_10_10_105709_add_custom_fields_to_existing_tables.php
+		- file : 2025_10_10_105709_add_custom_fields_to_existing_tables.php
+
+Seeder File :
+	- path : \database\seeders\SetCreatedBySeeder.php
+		- file : SetCreatedBySeeder.php
+
+	=== Add the creator Relationship in Modals and manage in data ====
+	1. Farmer :
+		- Modal path : \app\Models\Farmer.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\FarmerService.php
+			- getAllFarmers()
+			- createFarmer() : add created_by as authenticated user id
+			- updateFarmer() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\FarmersTable.php
+			- render()
+		- Blade file : \views\livewire\admin\farmers\index.blade.php
+		- Resourse file : \app\Http\Resources\FarmerResource.php
+			- Add the created_by : 
+				'created_by' => $this->creator ? [
+	                'id' => $this->creator->id,
+	                'name' => $this->creator->name,
+	                'email' => $this->creator->email,
+	            ] : null,
+
+	2. Seed Company :
+		- Modal path : \app\Models\Company.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\CompanyService.php
+			- searchAndSortCompanies()
+			- createCompany() : add created_by as authenticated user id
+			- updateCompany() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\FarmersTable.php
+			- No need to change
+		- Blade file : \views\livewire\admin\companies\index.blade.php
+		- Resourse file : No need for api
+
+	3. Seed Verity :
+		- Modal path : \app\Models\SeedVariety.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\SeedVarietyService.php
+			- getAllSeedVarieties()
+			- createSeedVariety() : add created_by as authenticated user id
+			- updateSeedVariety() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\SeedVarietiesTable.php
+			- render()
+		- Blade file : \views\livewire\admin\seed-varieties\index.blade.php
+		- Resourse file : No need for api
+
+	4. Potato Booking(Agreement) :
+		- Modal path : \app\Models\Agreement.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\AgreementService.php
+			- getAll()
+			- create() : add created_by as authenticated user id
+			- update() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\AgreementTable.php
+			- No need to change
+		- Blade file : \views\livewire\admin\agreements\index.blade.php
+		- Resourse file : They will already added in farmer resourse
+
+	5. Seeds booking :
+		- Modal path : \app\Models\SeedsBooking.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\SeedsBookingService.php
+			- getAll()
+			- searchAndSort()
+			- create() : add created_by as authenticated user id
+			- update() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\SeedsBookingTable.php
+			- No need to change
+		- Blade file : \views\livewire\admin\seeds-booking\index.blade.php
+		- Resourse file : They will already added in farmer resourse
+
+	6. Seeds distribution :
+		- Modal path : \app\Models\SeedDistribution.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\SeedDistributionService.php
+			- getAll()
+			- searchAndSort()
+			- create() : add created_by as authenticated user id
+			- update() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\SeedDistributionsTable.php
+			- No need to change
+		- Blade file : \views\livewire\admin\seed-distributions\index.blade.php
+		- Resourse file : They will already added in farmer resourse
+
+	7. Packaging distribution :
+		- Modal path : \app\Models\PackagingDistribution.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\PackagingDistributionService.php
+			- getAll()
+			- create() : add created_by as authenticated user id
+			- update() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\PackagingDistributionsTable.php
+			- No need to change
+		- Blade file : \views\livewire\admin\packaging-distributions\table.blade.php
+		- Resourse file : They will already added in farmer resourse
+
+	8. Advance Payments :
+		- Modal path : \app\Models\AdvancePayment.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\AdvancePaymentService.php
+			- getAll()
+			- create() : add created_by as authenticated user id
+			- update() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\AdvancePaymentsTable.php
+			- No need to change
+		- Blade file : \views\livewire\admin\advance-payments\index.blade.php
+		- Resourse file : They will already added in farmer resourse
+
+	9. Transporter :
+		- Modal path : \app\Models\Transporter.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\TransporterService.php
+			- getAllTransporters()
+			- getAllTransportersWithoutPagination()
+			- createTransporter() : add created_by as authenticated user id
+			- updateTransporter() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\TransporterTable.php
+			- render()
+		- Blade file : \views\livewire\admin\transporters\index.blade.php
+		- Resourse file : No need for api
+
+	10. Cold Storage :
+		- Modal path : \app\Models\ColdStorage.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\ColdStorageService.php
+			- getAll()
+			- create() : add created_by as authenticated user id
+			- update() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\ColdStoragesTable.php
+			- No need to change
+		- Blade file : \views\livewire\admin\cold-storages\index.blade.php
+		- Resourse file : No need for api
+
+	11. Storage Loading :
+		- Modal path : \app\Models\StorageLoading.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\StorageLoadingService.php
+			- getAll()
+			- create() : add created_by as authenticated user id
+			- update() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\StorageLoadingTable.php
+			- No need to change
+		- Blade file : \views\livewire\admin\storage-loadings\index.blade.php
+		- Resourse file : They will already added in farmer resourse
+
+	12. Challan :
+		- Modal path : \app\Models\Challan.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\ChallanService.php
+			- getAll()
+			- create() : add created_by as authenticated user id
+			- update() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\ChallansTable.php
+			- No need to change
+		- Blade file : \views\livewire\admin\challans\index.blade.php
+		- Resourse file : They will already added in farmer resourse
+
+	13. Unloading Company :
+		- Modal path : \app\Models\UnloadingCompany.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\UnloadingCompanyService.php
+			- getAll()
+			- create() : add created_by as authenticated user id
+			- update() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\UnloadingCompaniesTable.php
+			- No need to change
+		- Blade file : \views\livewire\admin\unloading-companies\index.blade.php
+
+	14. Storage Unloading :
+		- Modal path : \app\Models\StorageUnloading.php
+			- creator() : Add the relationship fn into modal
+		- Service file : \Services\StorageUnloadingService.php
+			- getAll()
+			- create() : add created_by as authenticated user id
+			- update() : add created_by as authenticated user id
+		- Table file : \Livewire\Admin\StorageUnloadingTable.php
+			- No need to change
+		- Blade file : \views\livewire\admin\storage-unloadings\index.blade.php
+
+================= Download Receipt =======================
+
+1. Packaging Distributions :
+	- Controller file : \Controllers\Api\V1\PackagingDistributionsController.php
+		- downloadPackagingDistributionPdf
+	- Service file : \Services\PackagingDistributionService.php
+		- downloadPackagingDistributionPDF()
+	- Blade file : \views\admin\packaging-distributions\packaging-distribution-pdf.blade.php
+
+2. Advance Payment :
+	- Controller file : \Controllers\Api\V1\AdvancePaymentsController.php
+		- downloadAdvancePaymentPdf
+	- Service file : \Services\AdvancePaymentService.php
+		- downloadAdvancePaymentPDF()
+	- Blade file : \views\admin\advance-payments\advance-payment-pdf.blade.php
+
+3. Storage Loading :
+	- Controller file : \Controllers\Api\V1\StorageLoadingsController.php
+		- downloadStorageLoadingPdf
+	- Service file : \Services\StorageLoadingService.php
+		- downloadStorageLoadingPDF()
+	- Blade file : \views\admin\storage-loadings\storage-loading-pdf.blade.php
+
+4. Storage UnLoading :
+	- Controller file : \Controllers\Api\V1\StorageUnloadingsController.php
+		- downloadStorageUnloadingPdf
+	- Service file : \Services\StorageUnloadingService.php
+		- downloadStorageUnloadingPDF()
+	- Blade file : \views\admin\storage-unloadings\storage-unloading-pdf.blade.php
+
+===== Display Data with Financial Year ==========
+
+1. Farmers :
+	- Table file : \Livewire\Admin\AgreementTable.php
+		- Add $selectedYear, financialYears
+		- updatedSelectedYear() : Add this event into this file and move boot code under this mount fn (Pls cross check, the site is break)
+		- render()
+		- exportData() : modify that fn and add the date fiter into query
+	- Blade file : \views\livewire\admin\agreements\index.blade.php
+		- Add input for calendar
+	- Service file : \Services\AgreementService.php
+		- getAll() : add $financialYear = null param and merge with query
+	- Export file : \app\Exports\AgreementsExport.php
+		- __construct() : Add this fn
+		- collection() : Modify query
+
+2. Agreement :
+	- Table file : \Livewire\Admin\FarmersTable.php
+		- Add $selectedYear, financialYears
+		- updatedSelectedYear() : Add this event into this file and move boot code under this mount fn (Pls cross check, the site is break)
+		- render() : modify that fn and add the date fiter into query
+		- exportData() : modify that fn and add the date fiter into query
+	- Blade file : \views\livewire\admin\farmers\index.blade.php
+		- Add input for calendar
+	- Service file : \Services\FarmerService.php
+		- No need to change
+	- Export file : \app\Exports\AgreementsExport.php
+		- __construct() : Add this fn
+		- collection() : Modify query
+
+3. Seeds booking :
+	- Table file : \Livewire\Admin\SeedsBookingTable.php
+		- Add $selectedYear, financialYears
+		- updatedSelectedYear() : Add this event into this file and move boot code under this mount fn (Pls cross check, the site is break)
+		- render() : modify that fn and add the date fiter into query
+		- exportData() : modify that fn and add the date fiter into query
+	- Blade file : \views\livewire\admin\seeds-booking\index.blade.php
+		- Add input for calendar
+	- Service file : \Services\SeedsBookingService.php
+		- searchAndSort() : add $financialYear = null param and merge with query
+		- getSeedsBookingReportData() : add $financialYear = null param and merge with query
+	- Export file : \app\Exports\SeedsBookingReportExport.php
+		- __construct() : Add the financialYear var
+
+==== Pending Due to Their Team is working ====
+4. Seeds Distribution : 
+	- Table file : \Livewire\Admin\SeedDistributionsTable.php
+		- Add $selectedYear, financialYears
+		- updatedSelectedYear() : Add this event into this file and move boot code under this mount fn (Pls cross check, the site is break)
+		- render() : modify that fn and add the date fiter into query
+		- exportData() : modify that fn and add the date fiter into query
+	- Blade file : \views\livewire\admin\seed-distributions\index.blade.php
+		- Add input for calendar
+	- Service file : \Services\SeedDistributionService.php
+		- getAll() : add $financialYear = null param and merge with query
+	- Export file : \app\Exports\SeedsDistributionReportExport.php
+		- __construct() : Add the financialYear var
+
+==============================================================
+
+5. Packaging Distribution :
+	- Table file : \Livewire\Admin\PackagingDistributionsTable.php
+		- Add $selectedYear, financialYears
+		- updatedSelectedYear() : Add this event into this file and move boot code under this mount fn (Pls cross check, the site is break)
+		- render() : modify that fn and add the date fiter into query
+		- exportData() : modify that fn and add the date fiter into query
+	- Blade file : \views\livewire\admin\packaging-distributions\table.blade.php
+		- Add input for calendar
+	- Service file : \Services\PackagingDistributionService.php
+		- getAll() : add $financialYear = null param and merge with query
+	- Export file : \app\Exports\ProcessingReportExport.php
+		- __construct() : Add the financialYear var
+
+6. Advance Payment :
+	- Table file : \Livewire\Admin\AdvancePaymentsTable.php
+		- Add $selectedYear, financialYears
+		- updatedSelectedYear() : Add this event into this file and move boot code under this mount fn (Pls cross check, the site is break)
+		- render() : modify that fn and add the date fiter into query
+		- exportData() : modify that fn and add the date fiter into query
+	- Blade file : \views\livewire\admin\advance-payments\index.blade.php
+		- Add input for calendar
+	- Service file : \Services\AdvancePaymentService.php
+		- getAll() : add $financialYear = null param and merge with query
+	- Export file : \app\Exports\AdvancePaymentsReportExport.php
+		- __construct() : Add the financialYear var
+
+7. Storage Loading :
+	- Table file : \Livewire\Admin\StorageLoadingTable.php
+		- Add $selectedYear, financialYears
+		- updatedSelectedYear() : Add this event into this file and move boot code under this mount fn (Pls cross check, the site is break)
+		- render() : modify that fn and add the date fiter into query
+		- exportData() : modify that fn and add the date fiter into query
+	- Blade file : \views\livewire\admin\storage-loadings\index.blade.php
+		- Add input for calendar
+	- Service file : \Services\StorageLoadingService.php
+		- getAll() : add $financialYear = null param and merge with query
+	- Export file : \app\Exports\StorageLoadingReportExport.php
+		- __construct() : Add the financialYear var
+
+8. Storage Unloading :
+	- Table file : \Livewire\Admin\StorageUnloadingTable.php
+		- Add $selectedYear, financialYears
+		- updatedSelectedYear() : Add this event into this file and move boot code under this mount fn (Pls cross check, the site is break)
+		- render() : modify that fn and add the date fiter into query
+		- exportData() : modify that fn and add the date fiter into query
+	- Blade file : \views\livewire\admin\storage-unloadings\index.blade.php
+		- Add input for calendar
+	- Service file : \Services\StorageUnloadingService.php
+		- getAll() : add $financialYear = null param and merge with query
+	- Export file : \app\Exports\StorageUnLoadingReportExport.php
+		- __construct() : Add the financialYear var
+	
+
+=================== Contact Email ================
+
+foolow this ChatGpt : https://chatgpt.com/c/68f1dfad-afa0-8322-958a-934ab60f0194

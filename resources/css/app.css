@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles to handle AdminLTE and Tailwind conflicts */
+.content-wrapper {
+    background: theme('colors.gray.100');
+} 
+

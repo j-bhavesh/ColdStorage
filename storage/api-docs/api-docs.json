@@ -1,0 +1,1789 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Cold Storage API Documentation",
+        "description": "API documentation for the Cold Storage Management System",
+        "contact": {
+            "email": "admin@example.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://192.168.1.118:8000",
+            "description": "Local API Server"
+        }
+    ],
+    "paths": {
+        "/api/v1/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register a new user",
+                "operationId": "ad77fe138bcb384ad65d167d5c8d1cc0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "phone",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "phone": {
+                                        "description": "10 digit unique phone number",
+                                        "type": "string",
+                                        "format": "digits",
+                                        "example": "1234567890"
+                                    },
+                                    "email": {
+                                        "description": "Optional email address",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "password": {
+                                        "description": "Minimum 6 characters",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "role": {
+                                        "description": "Optional role, defaults to 'accountant'",
+                                        "type": "string",
+                                        "example": "accountant"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User registered"
+                                        },
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "1|abcdefghijklmnopqrstuvwxyz"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "Bearer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "phone": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The phone has already been taken."
+                                                    }
+                                                },
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The email has already been taken."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login user",
+                "operationId": "bae68d1c55329ecb6e41f48285840c8f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "phone",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "format": "phone",
+                                        "example": "8988958585"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User logged in"
+                                        },
+                                        "access_token": {
+                                            "type": "string"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "Bearer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/api/v1/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout user",
+                "operationId": "c5cdd87fdbf9d0f95dede875bd023dec",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/companies": {
+            "get": {
+                "tags": [
+                    "Common Data"
+                ],
+                "summary": "Get list of companies",
+                "description": "Returns a list of all companies with their IDs and names",
+                "operationId": "dfb635e5b9715633ceac70a2c123d6cb",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Company Name"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/seed-varieties": {
+            "get": {
+                "tags": [
+                    "Common Data"
+                ],
+                "summary": "Get list of seed varieties",
+                "description": "Returns a list of all seed varieties with their IDs and names",
+                "operationId": "d9bb3d71814bbf84ec222344e69a2b27",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Seed Variety Name"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/farmers": {
+            "get": {
+                "tags": [
+                    "Farmers"
+                ],
+                "summary": "Get all farmers",
+                "operationId": "87ec079915481f16e324beffcce85e46",
+                "responses": {
+                    "200": {
+                        "description": "Farmers retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Farmers retrieved successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Farmer"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Farmers"
+                ],
+                "summary": "Create a new farmer",
+                "operationId": "0593fd8d8626e1d67fcd5dc1b91cbcc4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FarmerRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Farmer created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Farmer created successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Farmer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/farmers/{farmer}": {
+            "get": {
+                "tags": [
+                    "Farmers"
+                ],
+                "summary": "Get a specific farmer",
+                "operationId": "3a7c79fd8e9399b3f35f232e625ceac4",
+                "parameters": [
+                    {
+                        "name": "farmer",
+                        "in": "path",
+                        "description": "Farmer ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Farmer retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Farmer retrieved successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Farmer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Farmer not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Farmers"
+                ],
+                "summary": "Update a farmer",
+                "operationId": "2fb99cc3128fc44e968f423ca42bd40e",
+                "parameters": [
+                    {
+                        "name": "farmer",
+                        "in": "path",
+                        "description": "Farmer ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FarmerRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Farmer updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Farmer updated successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Farmer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "404": {
+                        "description": "Farmer not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Farmers"
+                ],
+                "summary": "Delete a farmer",
+                "operationId": "1003414221aebdbd4c67f1b784cf4f03",
+                "parameters": [
+                    {
+                        "name": "farmer",
+                        "in": "path",
+                        "description": "Farmer ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Farmer deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Farmer deleted successfully"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Farmer not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/seeds-booking": {
+            "get": {
+                "tags": [
+                    "Seeds Bookings"
+                ],
+                "summary": "Get all seeds bookings",
+                "description": "Retrieve a paginated list of all seeds bookings",
+                "operationId": "4f31824c6b9f5d19329cde493435ef03",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number for pagination",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Seeds bookings retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Seeds bookings retrieved successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Agreement"
+                                            }
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "last_page": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "per_page": {
+                                                    "type": "integer",
+                                                    "example": 15
+                                                },
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 75
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Seeds Bookings"
+                ],
+                "summary": "Create a new seeds booking",
+                "description": "Create a new seeds booking with the provided details",
+                "operationId": "f2be214f4e38f9c47f7f2bbf44df13e5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "customer_id",
+                                    "seeds_id",
+                                    "quantity",
+                                    "booking_date"
+                                ],
+                                "properties": {
+                                    "customer_id": {
+                                        "description": "ID of the customer",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "seeds_id": {
+                                        "description": "ID of the seeds",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "quantity": {
+                                        "description": "Quantity of seeds",
+                                        "type": "integer",
+                                        "example": 100
+                                    },
+                                    "booking_date": {
+                                        "description": "Date of booking",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-03-20"
+                                    },
+                                    "notes": {
+                                        "description": "Additional notes",
+                                        "type": "string",
+                                        "example": "Special handling required"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Seeds booking created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Seeds booking created successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Agreement"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "customer_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The customer id field is required"
+                                                    }
+                                                },
+                                                "seeds_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The seeds id field is required"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/seeds-booking/{id}": {
+            "get": {
+                "tags": [
+                    "Seeds Bookings"
+                ],
+                "summary": "Get a specific seeds booking",
+                "description": "Retrieve detailed information about a specific seeds booking",
+                "operationId": "afffadaf910c9f851128946f43831923",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Seeds booking ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Seeds booking retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Seeds booking retrieved successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Agreement"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Seeds booking not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Seeds booking not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Seeds Bookings"
+                ],
+                "summary": "Update a seeds booking",
+                "description": "Update an existing seeds booking with new information",
+                "operationId": "815a95075ba8cf6542d1f7b817ff8368",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Seeds booking ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "customer_id": {
+                                        "description": "ID of the customer",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "seeds_id": {
+                                        "description": "ID of the seeds",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "quantity": {
+                                        "description": "Updated quantity of seeds",
+                                        "type": "integer",
+                                        "example": 150
+                                    },
+                                    "booking_date": {
+                                        "description": "Updated booking date",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-03-21"
+                                    },
+                                    "notes": {
+                                        "description": "Updated notes",
+                                        "type": "string",
+                                        "example": "Updated handling instructions"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Seeds booking updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Seeds booking updated successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Agreement"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "quantity": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The quantity must be greater than 0"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Seeds booking not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Seeds booking not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Seeds Bookings"
+                ],
+                "summary": "Delete a seeds booking",
+                "description": "Permanently delete a seeds booking",
+                "operationId": "fa807d10817ca531e3038131ccc692e7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Seeds booking ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Seeds booking deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Seeds booking deleted successfully"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Seeds booking not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Seeds booking not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "FarmerRequest": {
+                "title": "Farmer Request",
+                "description": "Farmer request validation",
+                "required": [
+                    "name",
+                    "contact_number",
+                    "village_name"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "contact_number": {
+                        "type": "string",
+                        "example": "+1234567890"
+                    },
+                    "village_name": {
+                        "type": "string",
+                        "example": "123 Main St"
+                    }
+                },
+                "type": "object"
+            },
+            "SeedDistributionRequest": {
+                "title": "Seed Distribution Request",
+                "required": [
+                    "agreement_id",
+                    "farmer_id",
+                    "seed_variety_id",
+                    "company_id",
+                    "bag_quantity",
+                    "distribution_date"
+                ],
+                "properties": {
+                    "agreement_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "farmer_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "seed_variety_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "company_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "bag_quantity": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": 5
+                    },
+                    "distribution_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-03-20"
+                    },
+                    "vehicle_number": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "example": "ABC123",
+                        "nullable": true
+                    },
+                    "received_by": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "example": "John Doe",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "AgreementResource": {
+                "title": "Agreement Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "rate": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 100.5
+                    },
+                    "booking_amount": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 500
+                    },
+                    "booking_type": {
+                        "type": "string",
+                        "example": "Full"
+                    },
+                    "bag_quantity": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "Active"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    },
+                    "farmer": {
+                        "$ref": "#/components/schemas/FarmerResource"
+                    },
+                    "company": {
+                        "$ref": "#/components/schemas/CompanyResource"
+                    },
+                    "seed_variety": {
+                        "$ref": "#/components/schemas/SeedVarietyResource"
+                    }
+                },
+                "type": "object"
+            },
+            "CompanyResource": {
+                "title": "Company Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "ABC Company"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "123 Business Street"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "+1234567890"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "contact@company.com"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "FarmerResource": {
+                "title": "Farmer Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "farmer_id": {
+                        "type": "string",
+                        "example": "FARM123"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "village_name": {
+                        "type": "string",
+                        "example": "Village A"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "+1234567890"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "SeedDistributionResource": {
+                "title": "Seed Distribution Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "agreement_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "farmer_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "seed_variety_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "company_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "bag_quantity": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "distribution_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-03-20"
+                    },
+                    "vehicle_number": {
+                        "type": "string",
+                        "example": "ABC123",
+                        "nullable": true
+                    },
+                    "received_by": {
+                        "type": "string",
+                        "example": "John Doe",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    },
+                    "agreement": {
+                        "$ref": "#/components/schemas/AgreementResource"
+                    },
+                    "farmer": {
+                        "$ref": "#/components/schemas/FarmerResource"
+                    },
+                    "seed_variety": {
+                        "$ref": "#/components/schemas/SeedVarietyResource"
+                    },
+                    "company": {
+                        "$ref": "#/components/schemas/CompanyResource"
+                    }
+                },
+                "type": "object"
+            },
+            "SeedVarietyResource": {
+                "title": "Seed Variety Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Hybrid Corn"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "High-yield hybrid corn variety"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "Agreement": {
+                "title": "Agreement",
+                "description": "Agreement model for seeds booking",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "farmer_id": {
+                        "description": "ID of the farmer",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "company_id": {
+                        "description": "ID of the company",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "seed_variety_id": {
+                        "description": "ID of the seed variety",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "rate": {
+                        "description": "Rate per unit",
+                        "type": "number",
+                        "format": "float",
+                        "example": 150.5
+                    },
+                    "booking_type": {
+                        "description": "Type of booking",
+                        "type": "string",
+                        "example": "cash"
+                    },
+                    "booking_amount": {
+                        "description": "Total booking amount",
+                        "type": "number",
+                        "format": "float",
+                        "example": 15000
+                    },
+                    "bag_quantity": {
+                        "description": "Number of bags",
+                        "type": "integer",
+                        "example": 100
+                    },
+                    "status": {
+                        "description": "Status of the agreement",
+                        "type": "string",
+                        "example": "pending"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "farmer": {
+                        "$ref": "#/components/schemas/Farmer"
+                    },
+                    "seed_variety": {
+                        "$ref": "#/components/schemas/SeedVariety"
+                    },
+                    "company": {
+                        "$ref": "#/components/schemas/Company"
+                    }
+                },
+                "type": "object"
+            },
+            "Company": {
+                "title": "Company",
+                "description": "Company model",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the company",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "description": "The name of the company",
+                        "type": "string"
+                    },
+                    "contact_person": {
+                        "description": "The contact person of the company",
+                        "type": "string"
+                    },
+                    "contact_number": {
+                        "description": "The contact number of the company",
+                        "type": "string"
+                    },
+                    "address": {
+                        "description": "The address of the company",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "The date and time when the company was created",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "The date and time when the company was last updated",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "deleted_at": {
+                        "description": "The date and time when the company was soft deleted",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Farmer": {
+                "title": "Farmer",
+                "description": "Farmer model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "contact_number": {
+                        "type": "string",
+                        "example": "+1234567890"
+                    },
+                    "village_name": {
+                        "type": "string",
+                        "example": "123 Main St"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "SeedDistribution": {
+                "title": "Seed Distribution",
+                "description": "Seed Distribution model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "agreement_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "farmer_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "seed_variety_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "company_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "bag_quantity": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "distribution_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-03-20"
+                    },
+                    "vehicle_number": {
+                        "type": "string",
+                        "example": "ABC123",
+                        "nullable": true
+                    },
+                    "received_by": {
+                        "type": "string",
+                        "example": "John Doe",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-20T10:00:00Z"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "agreement": {
+                        "$ref": "#/components/schemas/Agreement"
+                    },
+                    "farmer": {
+                        "$ref": "#/components/schemas/Farmer"
+                    },
+                    "seed_variety": {
+                        "$ref": "#/components/schemas/SeedVariety"
+                    },
+                    "company": {
+                        "$ref": "#/components/schemas/Company"
+                    }
+                },
+                "type": "object"
+            },
+            "SeedVariety": {
+                "title": "Seed Variety",
+                "description": "Seed variety model",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the seed variety",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "description": "The name of the seed variety",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Description of the seed variety",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "The creation timestamp",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "The last update timestamp",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "deleted_at": {
+                        "description": "The soft delete timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Common Data",
+            "description": "API endpoints for common data"
+        },
+        {
+            "name": "Seeds Bookings",
+            "description": "API Endpoints for managing seeds bookings and agreements"
+        },
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Farmers",
+            "description": "Farmers"
+        }
+    ]
+}
